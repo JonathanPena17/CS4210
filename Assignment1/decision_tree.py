@@ -3,7 +3,7 @@
 # FILENAME: decision_tree.py
 # SPECIFICATION: Complete the given python program (decision_tree.py) that will read the file contact_lens.csv and output a decision tree.
 # FOR: CS 4210- Assignment #1
-# TIME SPENT: 4 hours
+# TIME SPENT: 30 minutes
 #-----------------------------------------------------------*/
 
 #IMPORTANT NOTE: DO NOT USE ANY ADVANCED PYTHON LIBRARY TO COMPLETE THIS CODE SUCH AS numpy OR pandas. You have to work here only with standard
