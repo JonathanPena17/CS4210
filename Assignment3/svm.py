@@ -1,9 +1,16 @@
 #-------------------------------------------------------------------------
 # AUTHOR: Jonathan Peña
 # FILENAME: sym.py
-# SPECIFICATION: description of the program
+# SPECIFICATION: Complete the Python program (svm.py) that will read the file optdigits.tra (3,823 samples)
+# that includes training instances of handwritten digits (optically recognized). Read the file
+# optdigits.names to get detailed information about this dataset. Also, check the file optdigits-orig.tra and
+# optdigits-orig.names to see the original format of this data, and how it was transformed to speed-up the
+# learning process (pre-processing phase). Your goal is to build multiple SVM classifiers using this data.
+# You will simulate a grid search, trying to find which combination of four SVM hyperparameters (c,
+# degree, kernel, and decision_function_shape) leads you to the best prediction performance. To test the
+# accuracy of those distinct models, you will use the file optdigits.tes (1,797 samples).
 # FOR: CS 4210- Assignment #3
-# TIME SPENT: how long it took you to complete the assignment
+# TIME SPENT: 2 hours
 #-----------------------------------------------------------*/
 
 #IMPORTANT NOTE: YOU HAVE TO WORK WITH THE PYTHON LIBRARIES numpy AND pandas to complete this code.
@@ -61,6 +68,6 @@ for i in c:
 
                 if accuracy > highest_accuracy:
                     highest_accuracy = accuracy
-                    print(f"Highest SVM accuracy so far: {highest_accuracy:.2f}, Parameters: C={i}, degree={j}, kernel={k}, decision_function_shape={l}")
+                    print(f"Highest SVM accuracy so far: {highest_accuracy:.6f}, Parameters: C={i}, degree={j}, kernel={k}, decision_function_shape={l}")
 
-print(f"Final highest SVM accuracy: {highest_accuracy:.2f}")
+print(f"Final highest SVM accuracy: {highest_accuracy:.6f}")
