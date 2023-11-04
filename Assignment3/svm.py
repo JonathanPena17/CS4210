@@ -69,5 +69,3 @@ for i in c:
                 if accuracy > highest_accuracy:
                     highest_accuracy = accuracy
                     print(f"Highest SVM accuracy so far: {highest_accuracy:.6f}, Parameters: C={i}, degree={j}, kernel={k}, decision_function_shape={l}")
-
-print(f"Final highest SVM accuracy: {highest_accuracy:.6f}")
