@@ -1,9 +1,16 @@
 #-------------------------------------------------------------------------
-# AUTHOR: your name
-# FILENAME: title of the source file
-# SPECIFICATION: description of the program
+# AUTHOR: Jonathan Peña
+# FILENAME: deep_learning.py
+# SPECIFICATION: Deep Learning. Complete the Python program (deep_learning.py) that will learn how to
+#   classify fashion items. You will use the dataset Fashion MNIST, which includes 70,000 grayscale
+#   images of 28×28 pixels each, with 10 classes, each class representing a fashion item as illustrated
+#   below. You will use Keras to load the dataset which includes 60,000 images for training and 10,000 for
+#   test. Your goal is to train and test multiple deep neural networks and check their corresponding
+#   performances, always updating the highest accuracy found. This time you will use a separate function
+#   named build_model() to define the architectures of your neural networks. Finally, the weights of the
+#   best model will be printed, together with the architecture and the learning curves.
 # FOR: CS 4210- Assignment #4
-# TIME SPENT: how long it took you to complete the assignment
+# TIME SPENT: 3 hrs
 #-----------------------------------------------------------*/
 
 #IMPORTANT NOTE: YOU CAN USE ANY PYTHON LIBRARY TO COMPLETE YOUR CODE.
@@ -19,22 +26,23 @@ def build_model(n_hidden, n_neurons_hidden, n_neurons_output, learning_rate):
 
     #-->add your Pyhton code here
 
-    #Creating the Neural Network using the Sequential API
-    #model = keras.models.Sequential()
-    #model.add(keras.layers.Flatten(input_shape=[28, 28]))                                #input layer
+    #Creating the Neural Network using the Sequential API                      
+    model = keras.models.Sequential()
+    model.add(keras.layers.Flatten(input_shape=[28, 28]))  # input layer
 
-    #iterate over the number of hidden layers to create the hidden layers:
-    #model.add(keras.layers.Dense(n_neurons_hidden, activation="relu"))                   #hidden layer with ReLU activation function
+    #iterate over the number of hidden layers to create the hidden layers:                
+    for _ in range(n_hidden):
+        model.add(keras.layers.Dense(n_neurons_hidden, activation="relu"))  #hidden layer with ReLU activation function
 
     #output layer
-    #model.add(keras.layers.Dense(n_neurons_output, activation="softmax"))                #output layer with one neural for each class and the softmax activation function since the classes are exclusive
+    model.add(keras.layers.Dense(n_neurons_output, activation="softmax"))   #output layer with one neural for each class and the softmax activation function since the classes are exclusive
 
     #defining the learning rate
-    #opt = keras.optimizers.SGD(learning_rate)
+    opt = keras.optimizers.SGD(learning_rate)
 
     #Compiling the Model specifying the loss function and the optimizer to use.
-    #model.compile(loss="sparse_categorical_crossentropy", optimizer=opt, metrics=["accuracy"])
-    #return model
+    model.compile(loss="sparse_categorical_crossentropy", optimizer=opt, metrics=["accuracy"])
+    return model
 
 
 #To install Tensor Flow on your terminal
@@ -59,40 +67,47 @@ n_hidden = [2, 5, 10]
 n_neurons = [10, 50, 100]
 l_rate = [0.01, 0.05, 0.1]
 
-for :                          #looking or the best parameters w.r.t the number of hidden layers
-    for :                      #looking or the best parameters w.r.t the number of neurons
-        for :                  #looking or the best parameters w.r.t the learning rate
+highestAccuracy = 0
+best_model = None
+best_history = None
+
+for h in n_hidden:                          #looking or the best parameters w.r.t the number of hidden layers
+    for n in n_neurons:                      #looking or the best parameters w.r.t the number of neurons
+        for l in l_rate:                  #looking or the best parameters w.r.t the learning rate
 
             #build the model for each combination by calling the function:
-            #model = build_model()
-            #-->add your Pyhton code here
+            model = build_model(h,n,10,l)
 
             #To train the model
             #history = model.fit(X_train, y_train, epochs=5, validation_data=(X_valid, y_valid))  #epochs = number times that the learning algorithm will work through the entire training dataset.
-            #-->add your Pyhton code here
+            history = model.fit(X_train, y_train, epochs=5, validation_data=(X_valid, y_valid))
 
             #Calculate the accuracy of this neural network and store its value if it is the highest so far. To make a prediction, do:
             class_predicted = np.argmax(model.predict(X_test), axis=-1)
-            #-->add your Pyhton code here
-
-            print("Highest accuracy so far: " + str(highestAccuracy))
-            print("Parameters: " + "Number of Hidden Layers: " + str(h) + ",number of neurons: " + str(n) + ",learning rate: " + str(l))
-            print()
+            accuracy = np.mean(class_predicted == y_test)
+            if accuracy > highestAccuracy:
+                highestAccuracy = accuracy
+                best_model = model
+                best_history = history.history
+                print("Highest accuracy so far: " + str(highestAccuracy))
+                print("Parameters: " + "Number of Hidden Layers: " + str(h) + ",number of neurons: " + str(n) + ",learning rate: " + str(l))
 
 #After generating all neural networks, print the summary of the best model found
 #The model’s summary() method displays all the model’s layers, including each layer’s name (which is automatically generated unless you set it when creating the layer), its
 #output shape (None means the batch size can be anything), and its number of parameters. Note that Dense layers often have a lot of parameters. This gives the model quite a lot of
 #flexibility to fit the training data, but it also means that the model runs the risk of overfitting, especially when you do not have a lot of training data.
 
-print(model.summary())
+if best_model is not None:
+    print(best_model.summary())
+
 img_file = './model_arch.png'
 tf.keras.utils.plot_model(model, to_file=img_file, show_shapes=True, show_layer_names=True)
 
 #plotting the learning curves of the best model
-pd.DataFrame(history.history).plot(figsize=(8, 5))
-plt.grid(True)
-plt.gca().set_ylim(0, 1) # set the vertical range to [0-1]
-plt.show()
-
-
-
+if best_history is not None:
+        pd.DataFrame(best_history).plot(figsize=(8, 5))
+        plt.grid(True)
+        plt.gca().set_ylim(0, 1)  # set the vertical range to [0-1]
+        plt.show()
+else:
+    print("No best model found.")
